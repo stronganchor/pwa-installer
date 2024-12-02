@@ -54,9 +54,11 @@ add_action('wp_head', function () {
 });
 
 add_action('wp_footer', function () {
-    echo '<div id="pwa-install-notification" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 10px 20px; border-radius: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
-        <button id="pwa-install-btn" style="background: #0073aa; color: white; padding: 5px 10px; border: none; cursor: pointer; border-radius: 3px;">' . __('Install App', 'pwa-installer') . '</button>
-        <button id="pwa-dismiss-btn" style="background: #555; color: white; padding: 5px 10px; border: none; cursor: pointer; border-radius: 3px; margin-left: 10px;">' . __('Dismiss', 'pwa-installer') . '</button>
+    echo '<div id="pwa-install-notification" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 10px 20px; border-radius: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); width: 90%; max-width: 400px; text-align: center;">
+        <div style="display: flex; justify-content: center; gap: 10px;">
+            <button id="pwa-install-btn" style="background: #0073aa; color: white; padding: 10px 15px; border: none; cursor: pointer; border-radius: 3px; flex: 1;">' . __('Uygulamayı İndir', 'pwa-installer') . '</button>
+            <button id="pwa-dismiss-btn" style="background: #555; color: white; padding: 10px 15px; border: none; cursor: pointer; border-radius: 3px; flex: 1;">' . __('Kapat', 'pwa-installer') . '</button>
+        </div>
     </div>';
 });
 
