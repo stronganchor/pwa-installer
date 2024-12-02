@@ -2,7 +2,7 @@
 /*
 Plugin Name: PWA Installer
 Description: Turns your WordPress site into a PWA and shows an install notification on the homepage.
-Version: 1.1
+Version: 1.2
 Author: Strong Anchor Tech
 Author URI: https://stronganchortech.com
 */
@@ -13,8 +13,11 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
 add_action('wp_enqueue_scripts', function () {
     wp_enqueue_script('pwa-install-script', plugin_dir_url(__FILE__) . 'js/install.js', [], filemtime(plugin_dir_path(__FILE__) . 'js/install.js'), true);
     wp_enqueue_script('service-worker-register', plugin_dir_url(__FILE__) . 'js/service-worker-register.js', [], filemtime(plugin_dir_path(__FILE__) . 'js/service-worker-register.js'), true);
+
+    // Pass translatable strings to JavaScript
     wp_localize_script('pwa-install-script', 'pwaInstallVars', [
         'installText' => __('Install App', 'pwa-installer'),
+        'dismissText' => __('Dismiss', 'pwa-installer'),
     ]);
 });
 
@@ -53,6 +56,7 @@ add_action('wp_head', function () {
 add_action('wp_footer', function () {
     echo '<div id="pwa-install-notification" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 10px 20px; border-radius: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
         <button id="pwa-install-btn" style="background: #0073aa; color: white; padding: 5px 10px; border: none; cursor: pointer; border-radius: 3px;">' . __('Install App', 'pwa-installer') . '</button>
+        <button id="pwa-dismiss-btn" style="background: #555; color: white; padding: 5px 10px; border: none; cursor: pointer; border-radius: 3px; margin-left: 10px;">' . __('Dismiss', 'pwa-installer') . '</button>
     </div>';
 });
 
