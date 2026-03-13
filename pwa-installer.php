@@ -2,7 +2,7 @@
 /*
 Plugin Name: PWA Installer
 Description: Turns your WordPress site into a PWA and shows an install notification on supported devices (not on /embed/ URLs).
-Version: 1.3
+Version: 1.3.1
 Update URI: https://github.com/stronganchor/pwa-installer
 Author: Strong Anchor Tech
 Author URI: https://stronganchortech.com
