@@ -3,11 +3,63 @@
 Plugin Name: PWA Installer
 Description: Turns your WordPress site into a PWA and shows an install notification on supported devices (not on /embed/ URLs).
 Version: 1.3
+Update URI: https://github.com/stronganchor/pwa-installer
 Author: Strong Anchor Tech
 Author URI: https://stronganchortech.com
 */
 
 if (!defined('ABSPATH')) exit; // Exit if accessed directly
+
+function pwa_installer_get_update_branch() {
+    $branch = 'main';
+
+    if ( defined( 'PWA_INSTALLER_UPDATE_BRANCH' ) && is_string( PWA_INSTALLER_UPDATE_BRANCH ) ) {
+        $override = trim( PWA_INSTALLER_UPDATE_BRANCH );
+        if ( '' !== $override ) {
+            $branch = $override;
+        }
+    }
+
+    return (string) apply_filters( 'pwa_installer_update_branch', $branch );
+}
+
+function pwa_installer_bootstrap_update_checker() {
+    $checker_file = plugin_dir_path( __FILE__ ) . 'plugin-update-checker/plugin-update-checker.php';
+    if ( ! file_exists( $checker_file ) ) {
+        return;
+    }
+
+    require_once $checker_file;
+
+    if ( ! class_exists( '\YahnisElsts\PluginUpdateChecker\v5\PucFactory' ) ) {
+        return;
+    }
+
+    $repo_url = (string) apply_filters( 'pwa_installer_update_repository', 'https://github.com/stronganchor/pwa-installer' );
+    $slug     = dirname( plugin_basename( __FILE__ ) );
+
+    $update_checker = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
+        $repo_url,
+        __FILE__,
+        $slug
+    );
+
+    $update_checker->setBranch( pwa_installer_get_update_branch() );
+
+    foreach ( array( 'PWA_INSTALLER_GITHUB_TOKEN', 'STRONGANCHOR_GITHUB_TOKEN', 'ANCHOR_GITHUB_TOKEN' ) as $constant_name ) {
+        if ( ! defined( $constant_name ) || ! is_string( constant( $constant_name ) ) ) {
+            continue;
+        }
+
+        $token = trim( (string) constant( $constant_name ) );
+        if ( '' !== $token ) {
+            $update_checker->setAuthentication( $token );
+            break;
+        }
+    }
+}
+
+pwa_installer_bootstrap_update_checker();
 
 /**
  * Helper: true if current request path contains /embed/
